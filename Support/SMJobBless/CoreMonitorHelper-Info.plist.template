@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleExecutable</key>
+    <string>ventaphobia.smc-helper</string>
+    <key>CFBundleIdentifier</key>
+    <string>ventaphobia.smc-helper</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>ventaphobia.smc-helper</string>
+    <key>CFBundlePackageType</key>
+    <string>BNDL</string>
+    <key>CFBundleVersion</key>
+    <string>__BUILD_NUMBER__</string>
+    <key>Label</key>
+    <string>ventaphobia.smc-helper</string>
+    <key>MachServices</key>
+    <dict>
+        <key>ventaphobia.smc-helper</key>
+        <true/>
+    </dict>
+    <key>SMAuthorizedClients</key>
+    <array>
+        <string>identifier "__CLI_BUNDLE_ID__" and anchor apple generic and certificate leaf[subject.OU] = "__TEAM_ID__"</string>
+        <string>identifier "__BLESS_HOST_BUNDLE_ID__" and anchor apple generic and certificate leaf[subject.OU] = "__TEAM_ID__"</string>
+    </array>
+</dict>
+</plist>

@@ -1,0 +1,19 @@
+{
+  "name": "Quiet ramp with thermal boost",
+  "sensor": "max",
+  "updateIntervalSeconds": 2.0,
+  "minimumRPM": 1400,
+  "maximumRPM": 6200,
+  "powerBoost": {
+    "enabled": true,
+    "wattsAtMaxBoost": 42.0,
+    "maxAddedTemperatureC": 8.0
+  },
+  "points": [
+    { "temperatureC": 38.0, "speedPercent": 24.0 },
+    { "temperatureC": 50.0, "speedPercent": 32.0 },
+    { "temperatureC": 65.0, "speedPercent": 50.0 },
+    { "temperatureC": 78.0, "speedPercent": 72.0 },
+    { "temperatureC": 88.0, "speedPercent": 100.0 }
+  ]
+}
