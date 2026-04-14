@@ -17,13 +17,13 @@
     <key>CFBundleShortVersionString</key>
     <string>0.1.0</string>
     <key>CFBundleVersion</key>
-    <string>0</string>
+    <string>3</string>
     <key>LSUIElement</key>
     <true/>
     <key>SMPrivilegedExecutables</key>
     <dict>
         <key>ventaphobia.smc-helper</key>
-        <string>identifier "ventaphobia.smc-helper" and anchor apple generic and certificate leaf[subject.OU] = "TEAMIDPLACEHOLDER"</string>
+        <string>identifier "ventaphobia.smc-helper" and anchor apple generic and certificate leaf[subject.OU] = "6VDP675K4L"</string>
     </dict>
 </dict>
 </plist>

@@ -152,7 +152,7 @@ Use the machine's real signing identity and team id:
 ```bash
 TEAM_ID=6VDP675K4L \
 VERSION=0.1.0 \
-BUILD_NUMBER=1 \
+BUILD_NUMBER=$(date +%Y%m%d%H%M%S) \
 SIGNING_IDENTITY='Developer ID Application: offyotto (6VDP675K4L)' \
 ./Scripts/build-dist.sh
 ```
@@ -212,10 +212,20 @@ shasum -a 256 dist/core-monitor-cli-0.1.0.tar.gz
 
 5. Update `Formula/core-monitor-cli.rb` if the version or hash changes.
 
+`BUILD_NUMBER` must monotonically increase for the blessed helper. If you ship a lower helper build number than an already-installed helper, `SMJobBless` will not replace it.
+
 End users install with:
 
 ```bash
+brew tap offyotto-sl3/core-monitor-cli
 brew install core-monitor-cli
+core-monitor helper install
+```
+
+Or in one command:
+
+```bash
+brew install offyotto-sl3/core-monitor-cli/core-monitor-cli
 core-monitor helper install
 ```
 

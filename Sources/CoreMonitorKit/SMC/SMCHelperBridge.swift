@@ -44,8 +44,31 @@ public final class SMCHelperBridge {
     }
 
     public func installHelperIfNeeded() throws {
-        guard !isInstalled() else { return }
-        try invokeBlessHost(arguments: ["install"])
+        let reachable = (try? readValue(key: "FNum", installIfNeeded: false)) != nil
+        if reachable {
+            return
+        }
+
+        guard locator.blessHostExecutableURL() != nil else {
+            if isInstalled() {
+                throw CoreMonitorError(
+                    "Privileged helper is present but not reachable, and no bless host bundle is available to repair it."
+                )
+            }
+            throw CoreMonitorError(
+                "Bless host bundle not found. Install the support bundle first or set CORE_MONITOR_BLESS_HOST."
+            )
+        }
+
+        if isInstalled() {
+            try invokeBlessHost(arguments: ["install", "--force"])
+        } else {
+            try invokeBlessHost(arguments: ["install"])
+        }
+
+        guard (try? readValue(key: "FNum", installIfNeeded: false)) != nil else {
+            throw CoreMonitorError("Privileged helper install completed, but XPC is still unreachable.")
+        }
     }
 
     public func readValue(key: String, installIfNeeded: Bool = true) throws -> Double {

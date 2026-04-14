@@ -13,7 +13,7 @@
     <key>CFBundlePackageType</key>
     <string>BNDL</string>
     <key>CFBundleVersion</key>
-    <string>0</string>
+    <string>3</string>
     <key>Label</key>
     <string>ventaphobia.smc-helper</string>
     <key>MachServices</key>
@@ -23,8 +23,8 @@
     </dict>
     <key>SMAuthorizedClients</key>
     <array>
-        <string>identifier "CoreTools.Core-Monitor-CLI" and anchor apple generic and certificate leaf[subject.OU] = "TEAMIDPLACEHOLDER"</string>
-        <string>identifier "CoreTools.Core-Monitor-CLI.BlessHost" and anchor apple generic and certificate leaf[subject.OU] = "TEAMIDPLACEHOLDER"</string>
+        <string>identifier "CoreTools.Core-Monitor-CLI" and anchor apple generic and certificate leaf[subject.OU] = "6VDP675K4L"</string>
+        <string>identifier "CoreTools.Core-Monitor-CLI.BlessHost" and anchor apple generic and certificate leaf[subject.OU] = "6VDP675K4L"</string>
     </array>
 </dict>
 </plist>
