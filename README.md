@@ -10,6 +10,8 @@
 
 This repo is intentionally CLI-first. The helper install is hosted by a tiny bundled app because `SMJobBless` requires an app bundle with `SMPrivilegedExecutables`.
 
+Repository: [offyotto-sl3/Core-Monitor-CLI](https://github.com/offyotto-sl3/Core-Monitor-CLI)
+
 ## Project Layout
 
 ```text
@@ -201,14 +203,14 @@ Release flow:
 
 1. Run `Scripts/build-dist.sh` with your Developer ID identity.
 2. Run `Scripts/notarize.sh`.
-3. Upload `dist/core-monitor-cli-<version>.tar.gz` to the GitHub release.
-4. Compute the SHA:
+3. Create a GitHub release and upload `dist/core-monitor-cli-<version>.tar.gz` and `dist/core-monitor-cli-<version>.zip`.
+4. If the tarball changes, recompute the SHA:
 
 ```bash
 shasum -a 256 dist/core-monitor-cli-0.1.0.tar.gz
 ```
 
-5. Update `Formula/core-monitor-cli.rb` with the real release URL and SHA.
+5. Update `Formula/core-monitor-cli.rb` if the version or hash changes.
 
 End users install with:
 
@@ -219,7 +221,7 @@ core-monitor helper install
 
 ## Curl Installer
 
-The included `install.sh` is meant to be published from a stable URL:
+The installer is published directly from this repo:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/offyotto-sl3/Core-Monitor-CLI/main/install.sh | bash
@@ -265,4 +267,4 @@ Expected result:
 
 - The currently installed helper on this machine authorizes `CoreTools.Core-Monitor`, not the new CLI identifier, so the unsigned debug CLI cannot talk to that preexisting daemon. That is a local test-environment mismatch, not a package-structure issue.
 - `SMJobBless` is deprecated as of macOS 13.0, but it remains the requested Apple-sanctioned workflow for privileged helper installation and is implemented here exactly for that reason.
-- Notarization was prepared and validated up to the credential boundary. A stored `notarytool` profile was not present on this machine, so the final submission step was not executed here.
+- Notarization was prepared and validated up to the credential boundary before GitHub publishing. The final notarization submission still depends on the stored notary credentials you configure for your Apple account.
