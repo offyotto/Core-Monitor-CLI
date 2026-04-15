@@ -7,7 +7,7 @@ cd "$REPO_ROOT"
 TEAM_ID="${TEAM_ID:-TEAMIDPLACEHOLDER}"
 CLI_BUNDLE_ID="${CLI_BUNDLE_ID:-CoreTools.Core-Monitor-CLI}"
 BLESS_HOST_BUNDLE_ID="${BLESS_HOST_BUNDLE_ID:-CoreTools.Core-Monitor-CLI.BlessHost}"
-VERSION="${VERSION:-0.1.0}"
+VERSION="${VERSION:-0.1.1}"
 BUILD_NUMBER="${BUILD_NUMBER:-$(date +%Y%m%d%H%M%S)}"
 ARCHS="${ARCHS:-arm64}"
 BUILD_CONFIGURATION="${BUILD_CONFIGURATION:-release}"
@@ -70,6 +70,9 @@ mkdir -p "$APP_DIR/Contents/MacOS" "$APP_DIR/Contents/Library/LaunchServices"
 cp "$STAGE_DIR/libexec/core-monitor-bless-host" "$APP_DIR/Contents/MacOS/core-monitor-bless-host"
 cp "$STAGE_DIR/libexec/ventaphobia.smc-helper" "$APP_DIR/Contents/Library/LaunchServices/ventaphobia.smc-helper"
 cp "$REPO_ROOT/BuildSupport/Generated/CoreMonitorBlessHost-Info.plist" "$APP_DIR/Contents/Info.plist"
+
+# Only ship the signed app bundle, not the unsigned staging copies used to assemble it.
+rm -f "$STAGE_DIR/libexec/core-monitor-bless-host" "$STAGE_DIR/libexec/ventaphobia.smc-helper"
 
 sign_path() {
   local identifier="$1"

@@ -497,52 +497,19 @@ private final class SMCController {
     }
 }
 
-private final class ConnectionAuthorizer {
-    private let requirementStrings: [String]
-
-    init(requirementStrings: [String]) {
-        self.requirementStrings = requirementStrings
-    }
-
-    func authorize(_ connection: NSXPCConnection) -> Bool {
-        guard let auditTokenData = connection.value(forKey: "auditToken") as? Data else {
-            return false
-        }
-
-        let attributes = [kSecGuestAttributeAudit: auditTokenData] as CFDictionary
-        var guest: SecCode?
-        let copyStatus = SecCodeCopyGuestWithAttributes(nil, attributes, SecCSFlags(), &guest)
-        guard copyStatus == errSecSuccess, let guest else {
-            return false
-        }
-
-        for requirementString in requirementStrings {
-            var requirement: SecRequirement?
-            let reqStatus = SecRequirementCreateWithString(requirementString as CFString, SecCSFlags(), &requirement)
-            guard reqStatus == errSecSuccess, let requirement else { continue }
-            if SecCodeCheckValidity(guest, SecCSFlags(), requirement) == errSecSuccess {
-                return true
-            }
-        }
-
-        return false
-    }
-}
-
 private final class SMCHelperService: NSObject, NSXPCListenerDelegate, SMCHelperXPCProtocol {
     private let controller = SMCController()
     private let stateStore = LeaseStateStore(
         url: URL(fileURLWithPath: "/var/run/\(CoreMonitorIdentity.helperExecutableName)-leases.json")
     )
-    private let authorizer: ConnectionAuthorizer
+    let connectionRequirement: String?
     private let queue = DispatchQueue(label: "ventaphobia.smc-helper.leases")
     private var timer: DispatchSourceTimer?
     private var leases: [Int: LeaseRecord]
 
     override init() {
         let info = Bundle.main.infoDictionary ?? [:]
-        let requirements = (info["SMAuthorizedClients"] as? [String]) ?? []
-        self.authorizer = ConnectionAuthorizer(requirementStrings: requirements)
+        self.connectionRequirement = Self.combinedConnectionRequirement(from: info)
         self.leases = stateStore.load()
         super.init()
         try? controller.open()
@@ -551,7 +518,7 @@ private final class SMCHelperService: NSObject, NSXPCListenerDelegate, SMCHelper
     }
 
     func listener(_ listener: NSXPCListener, shouldAcceptNewConnection newConnection: NSXPCConnection) -> Bool {
-        guard authorizer.authorize(newConnection) else {
+        guard connectionRequirement != nil else {
             return false
         }
 
@@ -559,6 +526,24 @@ private final class SMCHelperService: NSObject, NSXPCListenerDelegate, SMCHelper
         newConnection.exportedObject = self
         newConnection.resume()
         return true
+    }
+
+    private static func combinedConnectionRequirement(from info: [String: Any]) -> String? {
+        let requirements = ((info["SMAuthorizedClients"] as? [String]) ?? [])
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+
+        guard !requirements.isEmpty else {
+            return nil
+        }
+
+        if requirements.count == 1 {
+            return requirements[0]
+        }
+
+        return requirements
+            .map { "(\($0))" }
+            .joined(separator: " or ")
     }
 
     func setFanManual(_ fanID: Int, rpm: Int, withReply reply: @escaping (NSString?) -> Void) {
@@ -752,6 +737,10 @@ private func runCommandLineMode(arguments: [String]) -> Never {
 private func runServiceMode() -> Never {
     let listener = NSXPCListener(machServiceName: CoreMonitorIdentity.helperLabel)
     let service = SMCHelperService()
+    if let requirement = service.connectionRequirement {
+        // Enforce the same client signing requirements that are embedded for SMJobBless.
+        listener.setConnectionCodeSigningRequirement(requirement)
+    }
     listener.delegate = service
     listener.resume()
     RunLoop.current.run()

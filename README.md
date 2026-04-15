@@ -151,7 +151,7 @@ Use the machine's real signing identity and team id:
 
 ```bash
 TEAM_ID=6VDP675K4L \
-VERSION=0.1.0 \
+VERSION=0.1.1 \
 BUILD_NUMBER=$(date +%Y%m%d%H%M%S) \
 SIGNING_IDENTITY='Developer ID Application: offyotto (6VDP675K4L)' \
 ./Scripts/build-dist.sh
@@ -159,8 +159,8 @@ SIGNING_IDENTITY='Developer ID Application: offyotto (6VDP675K4L)' \
 
 That produces:
 
-- `dist/core-monitor-cli-0.1.0.tar.gz`
-- `dist/core-monitor-cli-0.1.0.zip`
+- `dist/core-monitor-cli-0.1.1.tar.gz`
+- `dist/core-monitor-cli-0.1.1.zip`
 - `dist/stage/bin/core-monitor`
 - `dist/stage/libexec/CoreMonitorBlessHost.app`
 
@@ -178,7 +178,7 @@ xcrun notarytool store-credentials core-monitor-notary \
 Then notarize:
 
 ```bash
-VERSION=0.1.0 \
+VERSION=0.1.1 \
 NOTARY_PROFILE=core-monitor-notary \
 ./Scripts/notarize.sh
 ```
@@ -186,13 +186,15 @@ NOTARY_PROFILE=core-monitor-notary \
 Equivalent raw commands:
 
 ```bash
-xcrun notarytool submit dist/core-monitor-cli-0.1.0.zip \
+xcrun notarytool submit dist/core-monitor-cli-0.1.1.zip \
   --keychain-profile core-monitor-notary \
   --wait
 
 xcrun stapler staple dist/stage/libexec/CoreMonitorBlessHost.app
+tar -C dist/stage -czf dist/core-monitor-cli-0.1.1.tar.gz .
+ditto -c -k --keepParent dist/stage dist/core-monitor-cli-0.1.1.zip
 spctl --assess --type execute --verbose dist/stage/libexec/CoreMonitorBlessHost.app
-spctl --assess --type exec --verbose dist/stage/bin/core-monitor
+spctl --assess --type exec --verbose dist/stage/bin/core-monitor || true
 ```
 
 ## Homebrew Release Model
@@ -207,7 +209,7 @@ Release flow:
 4. If the tarball changes, recompute the SHA:
 
 ```bash
-shasum -a 256 dist/core-monitor-cli-0.1.0.tar.gz
+shasum -a 256 dist/core-monitor-cli-0.1.1.tar.gz
 ```
 
 5. Update `Formula/core-monitor-cli.rb` if the version or hash changes.

@@ -1,8 +1,8 @@
 class CoreMonitorCli < Formula
   desc "macOS system monitor and fan control CLI backed by an SMJobBless helper"
   homepage "https://github.com/offyotto-sl3/Core-Monitor-CLI"
-  url "https://github.com/offyotto-sl3/Core-Monitor-CLI/releases/download/v0.1.0/core-monitor-cli-0.1.0.tar.gz"
-  sha256 "1c9ece00d4e2c22c07ea4e502e8b632e7c69822c196163a528b0a43dfbace067"
+  url "https://github.com/offyotto-sl3/Core-Monitor-CLI/releases/download/v0.1.1/core-monitor-cli-0.1.1.tar.gz"
+  sha256 "510d89f5a7adb9e480effd3fb1302b070d5be71a50da7d719d3cfdef050c00a4"
   license "MIT"
 
   depends_on macos: :ventura
