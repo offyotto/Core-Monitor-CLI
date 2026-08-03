@@ -1,3 +1,4 @@
+PS: This project will ONLY receive security patches from now on. 
 # Core-Monitor-CLI
 
 `Core-Monitor-CLI` is a Swift macOS CLI for system monitoring and privileged fan control. The privilege boundary follows Apple's `SMJobBless` model:
