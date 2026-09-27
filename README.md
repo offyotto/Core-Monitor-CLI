@@ -154,7 +154,7 @@ Use the machine's real signing identity and team id:
 TEAM_ID=6VDP675K4L \
 VERSION=0.1.1 \
 BUILD_NUMBER=$(date +%Y%m%d%H%M%S) \
-SIGNING_IDENTITY='Developer ID Application: offyotto (6VDP675K4L)' \
+SIGNING_IDENTITY='Developer ID Application: <NAME> (<TEAM_ID>)' \
 ./Scripts/build-dist.sh
 ```
 
